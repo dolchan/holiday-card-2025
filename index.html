@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Season's Greetings</title>
+    <style>
+        :root {
+            --bg-color: #0d1117; 
+            --term-bg: #161b22;
+            --term-border: #30363d;
+            --text-color: #58a6ff; 
+            --string-color: #a5d6ff;
+            --comment-color: #8b949e;
+            --keyword-color: #ff7b72;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Changed to min-height for scrolling */
+            color: #c9d1d9;
+        }
+
+        /* Snow Effect */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 1em;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+        @keyframes fall { to { transform: translateY(105vh); } }
+
+        /* Terminal Window */
+        .terminal {
+            width: 90%;
+            max-width: 650px; /* Slightly wider for photos */
+            background: var(--term-bg);
+            border: 1px solid var(--term-border);
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 10;
+            margin: 20px; /* Breathing room on mobile */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-header {
+            background: var(--term-border);
+            padding: 10px 15px;
+            display: flex;
+            gap: 8px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            flex-shrink: 0;
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+
+        .terminal-body {
+            padding: 20px;
+            overflow-y: auto; /* Allow scrolling if content gets tall */
+        }
+
+        /* Typing Animation */
+        .line {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            border-right: 2px solid transparent;
+            margin-bottom: 5px;
+        }
+        .anim-type { animation: typing 1.5s steps(40, end) forwards, blink-caret 0.75s step-end infinite; }
+        .anim-finish { width: 100%; border-right: none; }
+        
+        .keyword { color: var(--keyword-color); }
+        .function { color: #d2a8ff; }
+        .string { color: var(--string-color); }
+        .comment { color: var(--comment-color); display: block; margin-top: 15px; margin-bottom: 15px;}
+
+        @keyframes typing { from { width: 0; } to { width: 100%; border-right-color: transparent; } }
+        @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: #58a6ff; } }
+
+        /* --- PHOTO GALLERY STYLES --- */
+        .gallery-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 columns */
+            gap: 10px;
+            margin-top: 10px;
+            opacity: 0; /* Hidden initially */
+            transition: opacity 1.5s ease-in;
+        }
+
+        .photo-frame {
+            position: relative;
+            border: 1px solid var(--term-border);
+            border-radius: 4px;
+            overflow: hidden;
+            background: #000;
+            height: 180px; /* Fixed height keeps grid uniform */
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* This makes portrait/landscape mix perfectly */
+            transition: transform 0.3s ease;
+            opacity: 0.9;
+        }
+
+        .photo-frame:hover img {
+            transform: scale(1.05); /* Zoom effect */
+            opacity: 1;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 500px) {
+            .gallery-container { grid-template-columns: 1fr; } /* 1 column on phone */
+            .photo-frame { height: 220px; }
+        }
+
+        .btn-container {
+            margin-top: 25px;
+            opacity: 0;
+            transition: opacity 1s ease;
+            text-align: center;
+            padding-bottom: 10px;
+        }
+        
+        .btn {
+            background: #238636;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .btn:hover { background: #2ea043; }
+
+    </style>
+</head>
+<body>
+
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+        </div>
+        <div class="terminal-body" id="console">
+            </div>
+    </div>
+
+    <script>
+        // 1. Snow
+        function createSnow() {
+            const flake = document.createElement('div');
+            flake.classList.add('snowflake');
+            flake.textContent = Math.random() > 0.5 ? '❄' : '·'; 
+            flake.style.left = Math.random() * 100 + 'vw';
+            flake.style.opacity = Math.random();
+            flake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+            flake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(flake);
+            setTimeout(() => flake.remove(), 5000);
+        }
+        setInterval(createSnow, 100);
+
+        // 2. Content
+        const lines = [
+            { text: '<span class="keyword">import</span> <span class="string">memories</span>', delay: 500 },
+            { text: '<span class="keyword">def</span> <span class="function">load_gallery</span>():', delay: 1500 },
+            { text: '&nbsp;&nbsp;year = 2025', delay: 2500 },
+            { text: '&nbsp;&nbsp;<span class="function">print</span>(<span class="string">"Rendering highlights..."</span>)', delay: 3500 },
+            { text: '<span class="comment"># > 4 images found. <br># > Mounting display grid...</span>', delay: 5000 }
+        ];
+
+        const consoleDiv = document.getElementById('console');
+
+        // 3. Execution
+        lines.forEach((line, index) => {
+            setTimeout(() => {
+                const p = document.createElement('div');
+                p.classList.add('line', 'anim-type');
+                p.innerHTML = line.text;
+                
+                // Clear cursor from previous
+                const prev = consoleDiv.lastElementChild;
+                if(prev && prev.classList.contains('anim-type')) {
+                    prev.classList.remove('anim-type');
+                    prev.classList.add('anim-finish');
+                    prev.style.borderRight = 'none'; 
+                }
+                
+                consoleDiv.appendChild(p);
+
+                // Show Photos & Button after text finishes
+                if (index === lines.length - 1) {
+                    setTimeout(() => {
+                        // Insert Gallery
+                        const gallery = document.createElement('div');
+                        gallery.className = 'gallery-container';
+                        
+                        // UPDATE THESE IMAGE FILENAMES
+                        gallery.innerHTML = `
+                            <div class="photo-frame"><img src="images/photo1.jpg" alt="Memory 1"></div>
+                            <div class="photo-frame"><img src="images/photo2.jpg" alt="Memory 2"></div>
+                            <div class="photo-frame"><img src="images/photo3.jpg" alt="Memory 3"></div>
+                            <div class="photo-frame"><img src="images/photo4.jpg" alt="Memory 4"></div>
+                        `;
+                        consoleDiv.appendChild(gallery);
+                        
+                        // Force reflow for fade in
+                        requestAnimationFrame(() => { gallery.style.opacity = 1; });
+
+                        // Insert Button
+                        const btnDiv = document.createElement('div');
+                        btnDiv.className = 'btn-container';
+                        btnDiv.innerHTML = '<a href="https://github.com/dolchan" class="btn">View My Profile</a>';
+                        consoleDiv.appendChild(btnDiv);
+                        setTimeout(() => { btnDiv.style.opacity = 1; }, 1000);
+
+                    }, 2500); // Delay after last text line
+                }
+
+            }, line.delay);
+        });
+    </script>
+</body>
+</html>
