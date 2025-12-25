@@ -28,36 +28,70 @@
             font-family: 'Times New Roman', serif;
         }
 
-        /* --- THE NEW STARS EFFECT --- */
-        /* This pseudo-element creates the stars without needing extra HTML */
+/* --- UPDATED STARS EFFECT --- */
         body::before {
             content: " ";
             position: fixed;
             top: 0; left: 0;
-            width: 3px; height: 3px;
+            /* Base size increased to 4px */
+            width: 4px; height: 4px;
             background: transparent;
             border-radius: 50%;
-            z-index: -1; /* Ensures they stay behind the card */
-            opacity: 0.5;
-            /* This long list creates coordinates for the stars scattered across the viewport (vw/vh) */
+            z-index: -1;
+            /* Opacity increased for brightness (0.5 -> 0.8) */
+            opacity: 0.8;
+            
+            /* Star Map Updated:
+               - The 3rd value (e.g., 2px) is the blur radius (glow).
+               - The 4th value (e.g., 1px) is the spread radius (size increase).
+            */
             box-shadow: 
-                10vw 15vh #fff, 30vw 25vh 1px #fff, 80vw 10vh #fff, 95vw 5vh 2px #fff,
-                5vw 45vh 1px #fff, 25vw 35vh #fff, 60vw 40vh 2px #fff, 85vw 55vh #fff,
-                15vw 75vh #fff, 40vw 65vh 1px #fff, 70vw 85vh #fff, 90vw 95vh 2px #fff,
-                2vw 5vh 0px #fff, 12vw 22vh 1px #fff, 33vw 11vh 0px #fff, 47vw 33vh 1px #fff,
-                55vw 5vh 0px #fff, 66vw 19vh 1px #fff, 77vw 44vh 0px #fff, 89vw 21vh 1px #fff,
-                99vw 10vh 0px #fff, 1vw 90vh 1px #fff, 10vw 80vh 0px #fff, 20vw 95vh 1px #fff,
-                30vw 70vh 0px #fff, 45vw 88vh 1px #fff, 52vw 60vh 0px #fff, 68vw 92vh 1px #fff,
-                75vw 75vh 0px #fff, 88vw 82vh 1px #fff, 94vw 66vh 0px #fff, 50vw 50vh 2px #fff;
-            /* A subtle twinkle animation */
-            animation: twinkle 6s ease-in-out infinite alternate;
+                /* Big Bright Stars */
+                10vw 15vh 2px 2px #fff, 
+                80vw 10vh 2px 3px #fff, 
+                50vw 50vh 3px 2px #fff,
+                
+                /* Medium Stars */
+                30vw 25vh 1px 1px #fff, 
+                95vw 5vh 1px 1px #fff,
+                5vw 45vh 0px 1px #fff, 
+                60vw 40vh 0px 2px #fff, 
+                85vw 55vh 1px 1px #fff,
+                15vw 75vh 0px 1px #fff, 
+                
+                /* Scattered Smaller Stars */
+                40vw 65vh 0px 0px #fff, 
+                70vw 85vh 0px 0px #fff, 
+                90vw 95vh 0px 1px #fff,
+                2vw 5vh 0px 0px #fff, 
+                12vw 22vh 0px 1px #fff, 
+                33vw 11vh 0px 0px #fff, 
+                47vw 33vh 0px 1px #fff,
+                55vw 5vh 0px 0px #fff, 
+                66vw 19vh 0px 1px #fff, 
+                77vw 44vh 0px 0px #fff, 
+                89vw 21vh 0px 1px #fff,
+                99vw 10vh 0px 0px #fff, 
+                1vw 90vh 0px 1px #fff, 
+                10vw 80vh 0px 0px #fff, 
+                20vw 95vh 0px 1px #fff,
+                30vw 70vh 0px 0px #fff, 
+                45vw 88vh 0px 1px #fff, 
+                52vw 60vh 0px 0px #fff, 
+                68vw 92vh 0px 1px #fff,
+                75vw 75vh 0px 0px #fff, 
+                88vw 82vh 0px 1px #fff, 
+                94vw 66vh 0px 0px #fff;
+
+            animation: twinkle 5s ease-in-out infinite alternate;
         }
 
         @keyframes twinkle {
-            0% { opacity: 0.3; transform: scale(0.9); }
-            100% { opacity: 0.7; transform: scale(1.1); }
+            0% { opacity: 0.6; transform: scale(0.9); }
+            100% { opacity: 1.0; transform: scale(1.2); } /* Full brightness */
         }
         /* --------------------------- */
+        
         
         .card-container {
             background-color: var(--card-bg);
